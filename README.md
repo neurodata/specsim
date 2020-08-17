@@ -1,7 +1,6 @@
 
 
-This repo contains basic info for how to organize a repo, and the contents therein.
-Note several things:
+This repo contains the code and figures for running graph matching using spectral similarity matrices.
 
  - the organization of this repo, ie, the directories and sub-directories
  - the license, we always use Apache2
