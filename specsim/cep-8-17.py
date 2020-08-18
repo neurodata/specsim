@@ -4,7 +4,7 @@ import random
 import sys
 from joblib import Parallel, delayed
 from qap_sim import quadratic_assignment_sim
-
+import seaborn as sns
 from graspy.match import GraphMatch as GMP
 from graspy.simulations import sbm_corr
 
@@ -60,8 +60,17 @@ for k, rho in enumerate(rhos):
         
         ratio_ss = match_ratio(res_opt_ss['col_ind'], n)
         score_ss = res_opt_ss['score']
+
+        res = quadratic_assignment_sim(A1,A2, sim=False, maximize=True, options={'shuffle_input':False})
+        ratio_opt = match_ratio(res['col_ind'], n)
+        score_opt = res['score']
         
-        return ratio, score, ratio_ss, score_ss
+        res = quadratic_assignment_sim(A1,A2, sim=True, maximize=True, options={'shuffle_input':False})
+        ratio_opt_ss = match_ratio(res['col_ind'], n)
+        score_opt_ss = res['score']
+
+
+        return ratio, score, ratio_ss, score_ss, ratio_opt, score_opt, ratio_opt_ss, score_opt_ss
     
     result = Parallel(n_jobs=-1, verbose=10)(delayed(run_sim)(seed) for seed in seeds)
     
@@ -69,12 +78,20 @@ for k, rho in enumerate(rhos):
     scores[k,:] = [item[1] for item in result]
     ratios_ss[k,:] = [item[2] for item in result]
     scores_ss[k,:] = [item[3] for item in result]
+    ratios_opt[k,:] = [item[4] for item in result]
+    scores_opt[k,:] = [item[5] for item in result]
+    ratios_opt_ss[k,:] = [item[6] for item in result]
+    scores_opt_ss[k,:] = [item[7] for item in result]
     
     
 np.savetxt('ratios.csv',ratios, delimiter=',')
 np.savetxt('scores.csv',scores, delimiter=',')
 np.savetxt('ratios_ss.csv',ratios_ss, delimiter=',')
 np.savetxt('scores_ss.csv',scores_ss, delimiter=',')
+np.savetxt('ratios_opt.csv',ratios, delimiter=',')
+np.savetxt('scores_opt.csv',scores, delimiter=',')
+np.savetxt('ratios_opt_ss.csv',ratios_ss, delimiter=',')
+np.savetxt('scores_opt_ss.csv',scores_ss, delimiter=',')
 
 from scipy.stats import sem
 error = [2*sem(ratios[i,:]) for i in range(n_p)]
