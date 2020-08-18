@@ -13,9 +13,9 @@ def match_ratio(inds, n):
 
 
 n = 150
-m = 50
-t = 10
-rhos = 0.1 * np.arange(11)[5:]
+m = 100
+t = 30
+#rhos = 0.1 * np.arange(11)[5:]
 rhos = np.arange(5,10.5,0.5) *0.1
 n_p = len(rhos)
 ratios = np.zeros((n_p,m))
@@ -63,15 +63,30 @@ for k, rho in enumerate(rhos):
         
         return ratio, score, ratio_ss, score_ss
     
-    res = Parallel(n_jobs=-1, verbose=10)(delayed(run_sim)(seed) for seed in seeds)
+    result = Parallel(n_jobs=-1, verbose=10)(delayed(run_sim)(seed) for seed in seeds)
     
-    ratios[k,:] = [item[0] for item in res]
-    scores[k,:] = [item[1] for item in res]
-    ratios_ss[k,:] = [item[2] for item in res]
-    scores_ss[k,:] = [item[3] for item in res]
+    ratios[k,:] = [item[0] for item in result]
+    scores[k,:] = [item[1] for item in result]
+    ratios_ss[k,:] = [item[2] for item in result]
+    scores_ss[k,:] = [item[3] for item in result]
     
     
 np.savetxt('ratios.csv',ratios, delimiter=',')
 np.savetxt('scores.csv',scores, delimiter=',')
 np.savetxt('ratios_ss.csv',ratios_ss, delimiter=',')
 np.savetxt('scores_ss.csv',scores_ss, delimiter=',')
+
+from scipy.stats import sem
+error = [2*sem(ratios[i,:]) for i in range(n_p)]
+average = [np.mean(ratios[i,:] ) for i in range(n_p)]
+
+error_ss = [2*sem(ratios_ss[i,:]) for i in range(n_p)]
+average_ss = [np.mean(ratios_ss[i,:] ) for i in range(n_p)]
+sns.set_context('paper')
+#sns.set(rc={'figure.figsize':(15,10)})
+plt.errorbar(rhos,average_ss, error_ss,marker='o',capsize=3, elinewidth=1, markeredgewidth=1, label='GM+SS')
+plt.errorbar(rhos,average, error,marker='o',capsize=3, elinewidth=1, markeredgewidth=1, label='GM', color='red')
+plt.xlabel("rho")
+plt.ylabel("avergae match ratio")
+plt.legend()
+plt.savefig('r_100_t_50.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
