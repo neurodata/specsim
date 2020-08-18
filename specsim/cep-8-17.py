@@ -24,6 +24,12 @@ scores = np.zeros((n_p,m))
 ratios_ss = np.zeros((n_p,m))
 scores_ss = np.zeros((n_p,m))
 
+ratios_opt = np.zeros((n_p,m))
+scores_opt = np.zeros((n_p,m))
+
+ratios_opt_ss = np.zeros((n_p,m))
+scores_opt_ss = np.zeros((n_p,m))
+
 n_per_block = int(n/3)
 n_blocks = 3
 block_members = np.array(n_blocks * [n_per_block])
@@ -64,7 +70,7 @@ for k, rho in enumerate(rhos):
         res = quadratic_assignment_sim(A1,A2, sim=False, maximize=True, options={'shuffle_input':False})
         ratio_opt = match_ratio(res['col_ind'], n)
         score_opt = res['score']
-        
+
         res = quadratic_assignment_sim(A1,A2, sim=True, maximize=True, options={'shuffle_input':False})
         ratio_opt_ss = match_ratio(res['col_ind'], n)
         score_opt_ss = res['score']
@@ -88,10 +94,10 @@ np.savetxt('ratios.csv',ratios, delimiter=',')
 np.savetxt('scores.csv',scores, delimiter=',')
 np.savetxt('ratios_ss.csv',ratios_ss, delimiter=',')
 np.savetxt('scores_ss.csv',scores_ss, delimiter=',')
-np.savetxt('ratios_opt.csv',ratios, delimiter=',')
-np.savetxt('scores_opt.csv',scores, delimiter=',')
-np.savetxt('ratios_opt_ss.csv',ratios_ss, delimiter=',')
-np.savetxt('scores_opt_ss.csv',scores_ss, delimiter=',')
+np.savetxt('ratios_opt.csv',ratios_opt, delimiter=',')
+np.savetxt('scores_opt.csv',scores_opt, delimiter=',')
+np.savetxt('ratios_opt_ss.csv',ratios_opt_ss, delimiter=',')
+np.savetxt('scores_opt_ss.csv',scores_opt_ss, delimiter=',')
 
 from scipy.stats import sem
 error = [2*sem(ratios[i,:]) for i in range(n_p)]
