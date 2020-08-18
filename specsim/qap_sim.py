@@ -222,7 +222,7 @@ def _quadratic_assignment_faq(
         init_J="barycenter",
         init_weight=None,
         init_k=1,
-        maxiter=30,
+        maxiter=20,
         shuffle_input=True,
         eps=0.05,
         seed=None
