@@ -13,8 +13,8 @@ def match_ratio(inds, n):
 
 
 n = 150
-m = 100
-t = 50
+m = 50
+t = 10
 rhos = 0.1 * np.arange(11)[5:]
 rhos = np.arange(5,10.5,0.5) *0.1
 n_p = len(rhos)
@@ -31,8 +31,9 @@ block_probs = np.array([[0.2, 0.01, 0.01], [0.01, 0.1, 0.01], [0.01, 0.01, 0.2]]
 directed = False
 loops = False
 for k, rho in enumerate(rhos):
-
-    def run_sim(i):
+    np.random.seed(8888)
+    seeds = [np.random.randint(1e8, size=t) for i in range(m)]
+    def run_sim(seed):
 
         A1, A2 = sbm_corr(
             block_members, block_probs, rho, directed=directed, loops=loops
@@ -44,13 +45,12 @@ for k, rho in enumerate(rhos):
         res_opt_ss = None
         
         for j in range(t):
-            seed = np.random.randint(1000)
-            res = quadratic_assignment_sim(A1,A2, sim=False, maximize=True, options={'seed':seed})
+            res = quadratic_assignment_sim(A1,A2, sim=False, maximize=True, options={'seed':seed[j]})
             if res['score']>score:
                 res_opt = res
                 score = res['score']
             
-            res = quadratic_assignment_sim(A1,A2, sim=True, maximize=True, options={'seed':seed})
+            res = quadratic_assignment_sim(A1,A2, sim=True, maximize=True, options={'seed':seed[j]})
             if res['score']>score_ss:
                 res_opt_ss = res
                 score_ss = res['score']
@@ -63,7 +63,7 @@ for k, rho in enumerate(rhos):
         
         return ratio, score, ratio_ss, score_ss
     
-    res = Parallel(n_jobs=-1)(delayed(run_sim)(i) for i in range(m))
+    res = Parallel(n_jobs=-1, verbose=10)(delayed(run_sim)(seed) for seed in seeds)
     
     ratios[k,:] = [item[0] for item in res]
     scores[k,:] = [item[1] for item in res]
