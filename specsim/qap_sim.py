@@ -220,7 +220,7 @@ def _quadratic_assignment_faq(
         sim=False,
         partial_match=None,
         init_J="barycenter",
-        init_weight=1,
+        init_weight=None,
         init_k=1,
         maxiter=30,
         shuffle_input=True,
