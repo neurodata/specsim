@@ -107,9 +107,11 @@ def run_sim(r, t):
     average_ss = [np.mean(ratios_ss[i,:] ) for i in range(n_p)]
     sns.set_context('paper')
     #sns.set(rc={'figure.figsize':(15,10)})
+    txt =f'r={r}, t={t}'
     plt.errorbar(rhos,average_ss, error_ss,marker='o',capsize=3, elinewidth=1, markeredgewidth=1, label='GM+SS')
     plt.errorbar(rhos,average, error,marker='o',capsize=3, elinewidth=1, markeredgewidth=1, label='GM', color='red')
     plt.xlabel("rho")
     plt.ylabel("avergae match ratio")
+    plt.text(0.5,0.5,text)
     plt.legend()
-    plt.savefig('r_100_t_50.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
+    plt.savefig('figure_matchratio.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
