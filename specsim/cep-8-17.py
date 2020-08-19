@@ -14,7 +14,7 @@ def match_ratio(inds, n):
 
 n = 150
 m = 100
-t = 30
+t = 60
 #rhos = 0.1 * np.arange(11)[5:]
 rhos = np.arange(5,10.5,0.5) *0.1
 n_p = len(rhos)
