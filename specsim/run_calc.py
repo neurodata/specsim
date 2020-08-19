@@ -112,6 +112,6 @@ def run_sim(r, t):
     plt.errorbar(rhos,average, error,marker='o',capsize=3, elinewidth=1, markeredgewidth=1, label='GM', color='red')
     plt.xlabel("rho")
     plt.ylabel("avergae match ratio")
-    plt.text(0.5,0.5,text)
+    plt.text(0.5,0.5,txt)
     plt.legend()
     plt.savefig('figure_matchratio.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
