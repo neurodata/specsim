@@ -9,7 +9,7 @@ def quadratic_assignment_sim(
     cost_matrix,
     dist_matrix,
     maximize=False,
-    sim=False,
+    S=None,
     options=None
 ):
     r"""
@@ -210,14 +210,14 @@ def quadratic_assignment_sim(
         options = {}
 
     return _quadratic_assignment_faq(cost_matrix, dist_matrix, maximize,
-                                     sim, **options)
+                                     S, **options)
 
 
 def _quadratic_assignment_faq(
         cost_matrix,
         dist_matrix,
         maximize=False,
-        sim=False,
+        S=None,
         partial_match=None,
         init_J="barycenter",
         init_weight=None,
@@ -304,15 +304,24 @@ def _quadratic_assignment_faq(
                                        seed_dist_c], axis=None).astype(int)
     cost_matrix = cost_matrix[np.ix_(permutation_cost, permutation_cost)]
     dist_matrix = dist_matrix[np.ix_(permutation_dist, permutation_dist)]
-    #S = S[np.ix_(np.arange(n),permutation_dist)]
-    if sim is True:
-        ase = AdjacencySpectralEmbed(n_components=3, algorithm='truncated')
-        Xhat1 = ase.fit_transform(cost_matrix)
-        Xhat2 = ase.fit_transform(dist_matrix)
-        xhh1, xhh2 = _median_sign_flips(Xhat1, Xhat2)
-        S = xhh1 @ xhh2.T
-    else:
+    if S is None:
         S = np.zeros((n,n))
+        
+    S = S[np.ix_(np.arange(n),permutation_dist)]
+    # if sim is True:
+    #     ase = AdjacencySpectralEmbed(n_components=3, algorithm='truncated')
+    #     Xhat1 = ase.fit_transform(cost_matrix)
+    #     Xhat2 = ase.fit_transform(dist_matrix)
+    #     if flip=='median':
+    #         xhh1, xhh2 = _median_sign_flips(Xhat1, Xhat2)
+    #     elif flip=='jagt':
+    #         sp = SeedlessProcrustes().fit(Xhat1, Xhat2)
+    #         xhh1 = Xhat1@sp.Q
+    #         xhh2 = Xhat2
+
+    #     S = xhh1 @ xhh2.T
+    # else:
+        # S = np.zeros((n,n))
 
     # definitions according to Seeded Graph Matching [2].
     A11 = cost_matrix[:n_seeds, :n_seeds]
