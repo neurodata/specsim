@@ -8,6 +8,7 @@ import seaborn as sns
 from graspy.match import GraphMatch as GMP
 from graspy.simulations import sbm_corr
 from .jagt import SeedlessProcrustes
+from graspy.embed import AdjacencySpectralEmbed
 
 
 def run_sim(r, t, n=150, flip='median'):
