@@ -78,7 +78,7 @@ def run_sim(r, t, n=150, flip='median'):
                     res_opt = res
                     score = res['score']
                 
-                res = quadratic_assignment_sim(A1, A2, True, S options={'seed':seed[j]})
+                res = quadratic_assignment_sim(A1, A2, True, S, options={'seed':seed[j]})
                 if res['score']>score_ss:
                     res_opt_ss = res
                     score_ss = res['score']
