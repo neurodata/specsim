@@ -54,12 +54,12 @@ def run_sim2(r, t, n=150, flip='median'):
             res_3_opt = None
 
             ase3 = AdjacencySpectralEmbed(n_components=3, algorithm='truncated')
-            Xhat31 = ase.fit_transform(A1)
-            Xhat32 = ase.fit_transform(A2)
+            Xhat31 = ase3.fit_transform(A1)
+            Xhat32 = ase3.fit_transform(A2)
 
             ase10 = AdjacencySpectralEmbed(n_components=10, algorithm='truncated')
-            Xhat101 = ase.fit_transform(A1)
-            Xhat102 = ase.fit_transform(A2)
+            Xhat101 = ase10.fit_transform(A1)
+            Xhat102 = ase10.fit_transform(A2)
 
             if flip=='median':
                 xhh31, xhh32 = _median_sign_flips(Xhat31, Xhat32)
@@ -127,4 +127,4 @@ def run_sim2(r, t, n=150, flip='median'):
     plt.ylabel("avergae match ratio")
     plt.text(0.5,0.5,txt)
     plt.legend()
-    plt.savefig('figure_matchratio3v10.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
+    plt.savefig('figure_matchratio3v101.png', dpi=150, facecolor="w", bbox_inches="tight", pad_inches=0.3)
