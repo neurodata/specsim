@@ -90,10 +90,10 @@ def run_sim2(r, t, n=150, flip='median'):
                     score_10 = res['score']
                     
             ratio_3 = match_ratio(res_3_opt['col_ind'], n)
-            score_3 = res_opt['score']
+            score_3 = res_3_opt['score']
             
             ratio_10 = match_ratio(res_10_opt['col_ind'], n)
-            score_10 = res_opt_ss['score']
+            score_10 = res_10_opt['score']
 
 
             return ratio_3, score_3, ratio_10, score_10
