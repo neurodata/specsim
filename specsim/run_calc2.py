@@ -67,11 +67,11 @@ def run_sim2(r, t, n=150, flip='median'):
                 xhh101, xhh102 = _median_sign_flips(Xhat101, Xhat102)
                 S10 = xhh101 @ xhh102.T
             elif flip=='jagt':
-                sp3 = SeedlessProcrustes().fit(Xhat31, Xhat32)
+                sp3 = SeedlessProcrustes(init='sign_flips').fit(Xhat31, Xhat32)
                 xhh31 = Xhat31@sp3.Q_
                 xhh32 = Xhat32
                 S3 = xhh31 @ xhh32.T
-                sp10 = SeedlessProcrustes().fit(Xhat101, Xhat102)
+                sp10 = SeedlessProcrustes(init='sign_flips').fit(Xhat101, Xhat102)
                 xhh101 = Xhat101@sp10.Q_
                 xhh102 = Xhat102
                 S10 = xhh101 @ xhh102.T
