@@ -11,7 +11,7 @@ from .jagt import SeedlessProcrustes
 from graspy.embed import AdjacencySpectralEmbed
 from sklearn.metrics import pairwise_distances as pdist
 
-def run_sim2(r, t, n=150, flip='median'):
+def run_sim2(r, t, n=150, flip='median', sim='mult'):
     def match_ratio(inds, n):
         return np.count_nonzero(inds == np.arange(n)) / n
     def _median_sign_flips(X1, X2):
@@ -63,22 +63,23 @@ def run_sim2(r, t, n=150, flip='median'):
 
             if flip=='median':
                 xhh31, xhh32 = _median_sign_flips(Xhat31, Xhat32)
-                S3 = xhh31 @ xhh32.T
                 xhh101, xhh102 = _median_sign_flips(Xhat101, Xhat102)
-                S10 = xhh101 @ xhh102.T
             elif flip=='jagt':
                 sp3 = SeedlessProcrustes(init='sign_flips').fit(Xhat31, Xhat32)
                 xhh31 = Xhat31@sp3.Q_
                 xhh32 = Xhat32
-                # S3 = xhh31 @ xhh32.T
-                S3 = pdist(xhh31, xhh32)
                 sp10 = SeedlessProcrustes(init='sign_flips').fit(Xhat101, Xhat102)
                 xhh101 = Xhat101@sp10.Q_
                 xhh102 = Xhat102
-                # S10 = xhh101 @ xhh102.T
-                S10 = pdist(xhh101, xhh102)
             else:
                 S = None
+
+            if sim == 'mult':
+                S3 = xhh31 @ xhh32.T
+                S10 = xhh101 @ xhh102.T
+            elif sim == 'pdist':
+                S3 = pdist(xhh31, xhh32)
+                S10 = pdist(xhh101, xhh102)
     
             for j in range(t):
                 res = quadratic_assignment_sim(A1, A2, True, S3, options={'seed':seed[j]})
