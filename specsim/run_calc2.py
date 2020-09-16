@@ -9,7 +9,7 @@ from graspy.match import GraphMatch as GMP
 from graspy.simulations import sbm_corr
 from .jagt import SeedlessProcrustes
 from graspy.embed import AdjacencySpectralEmbed
-
+from sklearn.metrics import pairwise_distances as pdist
 
 def run_sim2(r, t, n=150, flip='median'):
     def match_ratio(inds, n):
@@ -70,11 +70,13 @@ def run_sim2(r, t, n=150, flip='median'):
                 sp3 = SeedlessProcrustes(init='sign_flips').fit(Xhat31, Xhat32)
                 xhh31 = Xhat31@sp3.Q_
                 xhh32 = Xhat32
-                S3 = xhh31 @ xhh32.T
+                # S3 = xhh31 @ xhh32.T
+                S3 = pdist(xhh31, xhh32)
                 sp10 = SeedlessProcrustes(init='sign_flips').fit(Xhat101, Xhat102)
                 xhh101 = Xhat101@sp10.Q_
                 xhh102 = Xhat102
-                S10 = xhh101 @ xhh102.T
+                # S10 = xhh101 @ xhh102.T
+                S10 = pdist(xhh101, xhh102)
             else:
                 S = None
     
