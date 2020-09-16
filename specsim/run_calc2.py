@@ -78,8 +78,8 @@ def run_sim2(r, t, n=150, flip='median', sim='mult'):
                 S3 = xhh31 @ xhh32.T
                 S10 = xhh101 @ xhh102.T
             elif sim == 'pdist':
-                S3 = pdist(xhh31, xhh32)
-                S10 = pdist(xhh101, xhh102)
+                S3 = -pdist(xhh31, xhh32)
+                S10 = -pdist(xhh101, xhh102)
     
             for j in range(t):
                 res = quadratic_assignment_sim(A1, A2, True, S3, options={'seed':seed[j]})
