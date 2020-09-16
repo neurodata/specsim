@@ -33,7 +33,7 @@ def run_sim2(r, t, n=150, flip='median', sim='mult'):
         D[D<0] = 0
         D = D**0.5
         D[D==0] = np.amin(D[D!=0])
-        return D
+        return 1/D
     #rhos = 0.1 * np.arange(11)[5:]
     m = r
     rhos = np.arange(5,10.5,0.5) *0.1
@@ -89,8 +89,8 @@ def run_sim2(r, t, n=150, flip='median', sim='mult'):
                 S3 = xhh31 @ xhh32.T
                 S10 = xhh101 @ xhh102.T
             elif sim == 'pdist':
-                S3 = -pdist_youngser(xhh31, xhh32)
-                S10 = -pdist_youngser(xhh101, xhh102)
+                S3 = pdist_youngser(xhh31, xhh32)
+                S10 = pdist_youngser(xhh101, xhh102)
     
             for j in range(t):
                 res = quadratic_assignment_sim(A1, A2, True, S3, options={'seed':seed[j]})
